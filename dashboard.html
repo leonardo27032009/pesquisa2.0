@@ -1,0 +1,99 @@
+<!-- filename: dashboard.html -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — Sistema</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#ffffff}
+    .kpi { font-weight:700; font-size:1.6rem; }
+    .small-muted { color:#6b7280; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">Sistema</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="criacao-produto.html">Criar Produto</a></li>
+          <li class="nav-item"><a class="nav-link" href="inventario.html">Inventário</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Sair</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <div class="row g-3">
+      <!-- KPI: Produtos -->
+      <div class="col-12 col-md-4">
+        <div class="card p-3 text-center">
+          <div class="kpi mb-0">4</div>
+          <small class="small-muted">Produtos</small>
+        </div>
+      </div>
+
+      <!-- KPI: Itens com pouco estoque -->
+      <div class="col-12 col-md-4">
+        <div class="card p-3 text-center">
+          <div class="kpi mb-0">2</div>
+          <small class="small-muted">Itens com pouco estoque</small>
+        </div>
+      </div>
+
+      <!-- KPI: Valor em estoque -->
+      <div class="col-12 col-md-4">
+        <div class="card p-3 text-center">
+          <div class="kpi mb-0">R$ 4.448,00</div>
+          <small class="small-muted">Valor em estoque</small>
+        </div>
+      </div>
+
+      <!-- Avisos -->
+      <div class="col-12">
+        <div class="card p-3">
+          <h6 class="mb-2">Avisos</h6>
+          <p class="small text-muted mb-2">Itens com estoque baixo (≤ 5 unidades):</p>
+          <ul class="mb-0">
+            <li class="small">Mouse Gamer — 3 unidades</li>
+            <li class="small">Teclado Compacto — 2 unidades</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <footer class="bg-light py-3 mt-auto">
+    <div class="container text-center small">© <span id="y2"></span> Sistema</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>document.getElementById('y2').textContent = new Date().getFullYear();</script>
+</body>
+</html>

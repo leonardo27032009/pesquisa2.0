@@ -1,0 +1,101 @@
+<!-- filename: login.html -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar — Meu Sistema</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f5f7fb; color: #111827; }
+    .card { border-radius: .75rem; box-shadow: 0 6px 18px rgba(15,23,42,0.06); }
+    .brand { font-weight:700; letter-spacing: .2px; }
+    .is-invalid + .invalid-feedback { display:block; }
+  </style>
+</head>
+<body class="d-flex align-items-center min-vh-100">
+  <main class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+        <div class="card p-4">
+          <div class="text-center mb-3">
+            <h4 class="brand">Meu Sistema</h4>
+            <p class="text-muted small mb-0">Acesse sua conta</p>
+          </div>
+
+          <form id="loginForm" novalidate>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mail ou usuário</label>
+              <input type="text" class="form-control" id="email" placeholder="seu@exemplo.com" required>
+              <div class="invalid-feedback">Por favor, informe o e-mail ou usuário.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Senha</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                <button type="button" class="btn btn-outline-secondary" id="togglePwd" aria-label="Mostrar senha">Mostrar</button>
+              </div>
+              <div class="invalid-feedback">Por favor, informe a senha.</div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <a href="#" class="small">Esqueci minha senha</a>
+              <button type="submit" class="btn btn-primary">Entrar</button>
+            </div>
+          </form>
+
+          <div class="text-center mt-3">
+            <small class="text-muted">Ainda não tem conta? <a href="criacao-produto.html">Cadastre-se</a></small>
+          </div>
+        </div>
+
+        <div class="text-center mt-3 small text-muted">
+          <span>© <span id="year"></span> Meu Sistema</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap Bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.getElementById('togglePwd').addEventListener('click', function () {
+      const pwd = document.getElementById('password');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        this.textContent = 'Ocultar';
+      } else {
+        pwd.type = 'password';
+        this.textContent = 'Mostrar';
+      }
+    });
+
+    (function () {
+      'use strict';
+      const form = document.getElementById('loginForm');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const elems = form.querySelectorAll('input');
+        elems.forEach(el => el.classList.remove('is-invalid'));
+
+        let valid = true;
+        if (!document.getElementById('email').value.trim()) {
+          document.getElementById('email').classList.add('is-invalid');
+          valid = false;
+        }
+        if (!document.getElementById('password').value.trim()) {
+          document.getElementById('password').classList.add('is-invalid');
+          valid = false;
+        }
+        if (valid) {
+          window.location.href = 'dashboard.html';
+        }
+      }, false);
+    })();
+  </script>
+</body>
+</html>

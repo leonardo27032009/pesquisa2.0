@@ -1,0 +1,233 @@
+<!-- filename: inventario.html -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerenciamento de Estoque — Meu Sistema</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#f6f8fb; color:#071023; }
+    .card { border-radius:.6rem; }
+    .low-stock { background: rgba(220,53,69,0.06); }
+    .action-btns .btn { margin-right: .25rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white mb-3">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">Meu Sistema</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="criacao-produto.html">Produtos</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">Estoque</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card p-3">
+          <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-center">
+            <h5 class="mb-0">Gerenciamento de Estoque</h5>
+
+            <div class="ms-auto d-flex gap-2 w-100 w-md-auto">
+              <input id="searchInput" type="search" class="form-control" placeholder="Buscar por nome ou código">
+              <a href="criacao-produto.html" class="btn btn-primary">Novo Produto</a>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle" id="inventoryTable">
+              <thead class="table-light">
+                <tr>
+                  <th>Nome</th>
+                  <th class="d-none d-sm-table-cell">Categoria</th>
+                  <th>Quantidade</th>
+                  <th class="d-none d-md-table-cell">Preço</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-name="Fone Bluetooth" data-sku="FB-001">
+                  <td>Fone Bluetooth</td>
+                  <td class="d-none d-sm-table-cell">Eletrônicos</td>
+                  <td class="qty">12</td>
+                  <td class="d-none d-md-table-cell">R$ 149,90</td>
+                  <td class="text-end action-btns">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editRow(this)">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)">Excluir</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustStock(this)">Ajustar</button>
+                  </td>
+                </tr>
+
+                <tr data-name="Mouse Gamer" data-sku="MG-204">
+                  <td>Mouse Gamer</td>
+                  <td class="d-none d-sm-table-cell">Periféricos</td>
+                  <td class="qty">3</td>
+                  <td class="d-none d-md-table-cell">R$ 219,00</td>
+                  <td class="text-end action-btns">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editRow(this)">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)">Excluir</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustStock(this)">Ajustar</button>
+                  </td>
+                </tr>
+
+                <tr data-name="Cabo USB-C" data-sku="CB-078">
+                  <td>Cabo USB-C</td>
+                  <td class="d-none d-sm-table-cell">Acessórios</td>
+                  <td class="qty">58</td>
+                  <td class="d-none d-md-table-cell">R$ 29,90</td>
+                  <td class="text-end action-btns">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editRow(this)">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)">Excluir</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustStock(this)">Ajustar</button>
+                  </td>
+                </tr>
+
+                <tr data-name="Teclado Compacto" data-sku="TK-990">
+                  <td>Teclado Compacto</td>
+                  <td class="d-none d-sm-table-cell">Periféricos</td>
+                  <td class="qty">2</td>
+                  <td class="d-none d-md-table-cell">R$ 129,00</td>
+                  <td class="text-end action-btns">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editRow(this)">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)">Excluir</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustStock(this)">Ajustar</button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="adjustModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <form id="adjustForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Ajustar Estoque</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="rowIndex">
+            <div class="mb-3">
+              <label class="form-label">Quantidade atual</label>
+              <input id="currentQty" class="form-control" disabled>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Ajuste (+/-)</label>
+              <input id="adjustValue" type="number" class="form-control" required>
+              <div class="invalid-feedback">Informe um valor válido</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Aplicar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <footer class="bg-light py-3 mt-auto">
+    <div class="container text-center small">© <span id="y2"></span> Sistema</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function markLowStock() {
+      const rows = document.querySelectorAll('#inventoryTable tbody tr');
+      rows.forEach(row => {
+        const qtyEl = row.querySelector('.qty');
+        const qty = Number(qtyEl.textContent.trim());
+        row.classList.remove('low-stock', 'table-danger');
+        qtyEl.classList.remove('text-danger', 'fw-semibold');
+        if (!isNaN(qty) && qty <= 5) {
+          row.classList.add('low-stock');
+          qtyEl.classList.add('text-danger', 'fw-semibold');
+        }
+      });
+    }
+    markLowStock();
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const q = this.value.trim().toLowerCase();
+      const rows = document.querySelectorAll('#inventoryTable tbody tr');
+      rows.forEach(row => {
+        const name = row.getAttribute('data-name')?.toLowerCase() || '';
+        const sku = row.getAttribute('data-sku')?.toLowerCase() || '';
+        const match = !q || name.includes(q) || sku.includes(q);
+        row.style.display = match ? '' : 'none';
+      });
+    });
+
+    function editRow(btn) {
+      const tr = btn.closest('tr');
+      const name = tr.querySelector('td').textContent.trim();
+      alert('Abrir edição para: ' + name + ' (simulado).');
+    }
+
+    function deleteRow(btn) {
+      const tr = btn.closest('tr');
+      const name = tr.querySelector('td').textContent.trim();
+      if (confirm('Deseja excluir "' + name + '"?')) {
+        tr.remove();
+      }
+    }
+
+    let adjustModal = new bootstrap.Modal(document.getElementById('adjustModal'));
+    function adjustStock(btn) {
+      const tr = btn.closest('tr');
+      const idx = Array.from(tr.parentElement.children).indexOf(tr);
+      const qty = tr.querySelector('.qty').textContent.trim();
+      document.getElementById('rowIndex').value = idx;
+      document.getElementById('currentQty').value = qty;
+      document.getElementById('adjustValue').value = '';
+      adjustModal.show();
+    }
+
+    document.getElementById('adjustForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const idx = Number(document.getElementById('rowIndex').value);
+      const val = Number(document.getElementById('adjustValue').value);
+      if (isNaN(val) || !isFinite(val)) {
+        document.getElementById('adjustValue').classList.add('is-invalid');
+        return;
+      }
+      const tbody = document.querySelector('#inventoryTable tbody');
+      const row = tbody.children[idx];
+      if (!row) return;
+      const qtyEl = row.querySelector('.qty');
+      const current = Number(qtyEl.textContent.trim());
+      const updated = Math.max(0, current + val);
+      qtyEl.textContent = updated;
+      adjustModal.hide();
+      markLowStock();
+    });
+  </script>
+</body>
+</html>
